@@ -1,0 +1,20 @@
+# 因为存在git地址，所以就从 git 地址上找文件，如果 地址是 yml 文件，就使用 spring.profiles.active或者include 加载数据.
+server:
+  port: 7001
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: # 此处是自己创尔 git 地址
+          search-paths: src/main/resources
+          username: # 此处是自己的 git 账户
+          password: # 此处是自己的 git 密码
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10086/eureka,http://localhost:10087/eureka

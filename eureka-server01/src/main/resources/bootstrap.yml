@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: eureka-server
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: UserProvider01
+      profile: dev
+      label: master
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10086/eureka,http://localhost:10087/eureka

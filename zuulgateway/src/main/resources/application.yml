@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: zull-gateway
+
+server:
+  port: 80
+
+# 通过 url 直接映射
+#zuul:
+#  routes:
+#    userprovider001:
+#      # userprovider001 部分为路由的名字，可以任意定义，但是一组映射关系的path和url要相同
+#      path: /userprovider001/**
+#      url: http://localhost:8001/
+#    userprovider002:
+#      path: /userprovider002/**
+#      url: http://localhost:8002/
+
+
+# 通过 serviceId的映射方式支持了断路器，对于服务故障的情况下，可以有效的防止故障蔓延到服务网关上而影响整个系统的对外服务。
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10086/eureka,http://localhost:10087/eureka
+
+
+zuul:
+  routes:
+    userprovider:
+      path: /service/**
+      service-id: USERPROVIDER
+  # 就是将web中的配置 到zuul中 这样多个web都用熔断 仅需要写一次 而不必要每个web 都配置。
+  retryable: true   #打开重试
+
+ribbon:
+  NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
+  ConnectionTimeOut: 250
+  ReadTimeout: 1000
+  OkToRetryOnAllOperations: true
+  MaxAutoRetriesNextServer: 1
+  MaxAutoRetries: 1
+
+#设定Hystrix熔断超时时间
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 6000
